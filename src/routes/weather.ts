@@ -11,12 +11,23 @@ export async function weatherRoutes(app: FastifyInstance) {
         })
 
         const { cityName } = getNextDaysWeatherParamsSchema.parse(request.params)
-
+        
         const response = await api.get("", {
             params: {
                 q: cityName,
             }
         });
+
+        const favoriteCity = await prisma.favoriteCity.findFirst({
+            where: {
+                name: cityName
+            },
+        })
+        
+        if (favoriteCity) {
+            response.data.isFavorite = true;
+            response.data.favoriteCityId = favoriteCity.id;
+        }
 
         return reply.send(response.data)
     })
