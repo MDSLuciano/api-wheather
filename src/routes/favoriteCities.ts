@@ -62,6 +62,6 @@ export async function favoriteCitiesRoutes(app: FastifyInstance) {
 
         const favoriteCities = await prisma.favoriteCity.findMany()
 
-        return reply.send({favoriteCities})
+        return reply.send(favoriteCities)
     })
 }
